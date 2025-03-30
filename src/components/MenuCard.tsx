@@ -27,7 +27,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart }) => {
       </div>
       <CardHeader className="pb-2">
         <CardTitle className="text-xl text-hotel-navy">{item.name}</CardTitle>
-        <p className="text-hotel-gold font-semibold">${item.price.toFixed(2)}</p>
+        <p className="text-hotel-gold font-semibold">NPR {item.price.toFixed(0)}</p>
       </CardHeader>
       <CardContent className="pb-2 flex-grow">
         <CardDescription>{item.description}</CardDescription>

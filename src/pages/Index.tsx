@@ -91,8 +91,7 @@ const IndexContent = () => {
                         key={item.id}
                         item={{
                           ...item,
-                          price: convertToNPR(item.price),
-                          priceDisplay: `NPR ${convertToNPR(item.price).toFixed(0)}`
+                          price: convertToNPR(item.price)
                         }}
                         onAddToCart={() => handleAddToCart(item)}
                       />
