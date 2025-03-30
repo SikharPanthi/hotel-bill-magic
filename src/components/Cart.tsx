@@ -7,7 +7,7 @@ import { MenuItem, getMenuItemById } from "@/utils/menuData";
 import { downloadPDF } from "@/utils/pdfGenerator";
 import { Check, Download, Receipt, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 // Define the cart item interface
 export interface CartItem {
@@ -115,7 +115,6 @@ const Cart: React.FC = () => {
   const { items, removeItem, updateQuantity, getCartTotal, clearCart } = useCart();
   const [isPaid, setIsPaid] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-  const toast = useToast();
 
   const { subtotal, tax, total } = getCartTotal();
   const orderNumber = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -127,8 +126,9 @@ const Cart: React.FC = () => {
     setTimeout(() => {
       setIsPaymentProcessing(false);
       setIsPaid(true);
-      toast("Payment successful!", {
-        description: "Your order has been processed.",
+      toast({
+        title: "Payment successful!",
+        description: "Your order has been processed."
       });
     }, 1500);
   };
