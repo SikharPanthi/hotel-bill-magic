@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartItemCount, onCartOpen }) => {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <Hotel className="h-6 w-6 text-hotel-gold" />
-          <span className="text-xl font-semibold">Luxury Hotel</span>
+          <span className="text-xl font-semibold">Sikhar Restaurant</span>
         </div>
 
         {/* Desktop Navigation */}

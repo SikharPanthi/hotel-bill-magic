@@ -14,12 +14,24 @@ const categories = [
   { id: "beverages", label: "Beverages" },
 ];
 
+// Helper function to convert USD to NPR
+const convertToNPR = (usdAmount: number): number => {
+  // Conversion rate: 1 USD = approximately 133 NPR (simplified for demo)
+  const exchangeRate = 133;
+  return usdAmount * exchangeRate;
+};
+
 const IndexContent = () => {
   const { items, addItem } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const handleAddToCart = (item: MenuItem) => {
-    addItem(item);
+    // Convert the price to NPR before adding to cart
+    const itemInNPR = {
+      ...item,
+      price: convertToNPR(item.price)
+    };
+    addItem(itemInNPR);
   };
 
   const handleCartOpen = () => {
@@ -36,14 +48,14 @@ const IndexContent = () => {
           <div className="absolute inset-0 z-0">
             <img
               src="https://images.unsplash.com/photo-1514516816566-de580c621376?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-              alt="Luxury Hotel Restaurant"
+              alt="Sikhar Restaurant"
               className="w-full h-full object-cover opacity-50"
             />
           </div>
           <div className="relative z-10 text-center text-white px-4 max-w-4xl">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">Fine Dining Experience</h1>
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">Sikhar Restaurant</h1>
             <p className="text-lg md:text-xl mb-8">
-              Indulge in exquisite cuisine crafted by our award-winning chefs using the finest seasonal ingredients.
+              Enjoy tasty Nepali food made by our best chefs using fresh ingredients.
             </p>
             <a href="#menu" className="bg-hotel-gold hover:bg-hotel-gold/90 text-white font-semibold py-3 px-8 rounded-md inline-block transition-colors">
               View Menu
@@ -77,8 +89,12 @@ const IndexContent = () => {
                     {getMenuItemsByCategory(category.id as MenuItem["category"]).map((item) => (
                       <MenuCard
                         key={item.id}
-                        item={item}
-                        onAddToCart={handleAddToCart}
+                        item={{
+                          ...item,
+                          price: convertToNPR(item.price),
+                          priceDisplay: `NPR ${convertToNPR(item.price).toFixed(0)}`
+                        }}
+                        onAddToCart={() => handleAddToCart(item)}
                       />
                     ))}
                   </div>
@@ -102,13 +118,13 @@ const IndexContent = () => {
               <div className="lg:w-1/2">
                 <h2 className="text-3xl md:text-4xl font-bold text-hotel-navy mb-6">About Our Restaurant</h2>
                 <p className="text-gray-700 mb-4">
-                  Nestled within our luxury hotel, our restaurant offers an unparalleled dining experience that combines exquisite cuisine with elegant ambiance.
+                  Welcome to Sikhar Restaurant. We serve tasty Nepali food in a friendly place.
                 </p>
                 <p className="text-gray-700 mb-4">
-                  Our team of award-winning chefs crafts each dish with precision and creativity, using only the finest seasonal ingredients sourced from local farmers and premium suppliers.
+                  Our chefs make good food with fresh ingredients from local farms and suppliers.
                 </p>
                 <p className="text-gray-700">
-                  Whether you're joining us for a casual breakfast, business lunch, or romantic dinner, we promise a memorable culinary journey that delights all your senses.
+                  Come join us for breakfast, lunch, or dinner. You will enjoy the food and friendly service.
                 </p>
               </div>
             </div>
@@ -120,14 +136,14 @@ const IndexContent = () => {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-8">Make a Reservation</h2>
             <p className="mb-8 max-w-2xl mx-auto text-lg">
-              For reservations, special events, or any inquiries, please don't hesitate to contact us.
+              For reservations, special events, or any questions, please contact us.
             </p>
             
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="bg-hotel-navy/30 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold mb-4 text-hotel-gold">Location</h3>
-                <p>123 Elegant Street</p>
-                <p>Cityville, State 12345</p>
+                <p>Butwal, Buddhanagar</p>
+                <p>Nepal</p>
               </div>
               
               <div className="bg-hotel-navy/30 p-6 rounded-lg">
@@ -139,8 +155,8 @@ const IndexContent = () => {
               
               <div className="bg-hotel-navy/30 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold mb-4 text-hotel-gold">Contact</h3>
-                <p>Phone: (555) 123-4567</p>
-                <p>Email: dining@luxuryhotel.com</p>
+                <p>Phone: +977 9867391430</p>
+                <p>Email: psikhar74@gmail.com</p>
               </div>
             </div>
           </div>
@@ -149,7 +165,7 @@ const IndexContent = () => {
         {/* Footer */}
         <footer className="bg-black text-white py-8">
           <div className="container mx-auto px-4 text-center">
-            <p>© {new Date().getFullYear()} Luxury Hotel. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Sikhar Restaurant. All rights reserved.</p>
             <p className="mt-2 text-gray-400 text-sm">
               This is a demo application created for educational purposes.
             </p>
