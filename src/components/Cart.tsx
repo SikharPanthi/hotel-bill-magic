@@ -1,3 +1,4 @@
+
 import React, { useContext, useState, createContext } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -144,6 +145,8 @@ const Cart: React.FC = () => {
       total,
       date: new Date(),
       orderNumber,
+      paymentMethod: paymentMethod === "card" ? "Credit Card" : 
+                     paymentMethod === "esewa" ? "eSewa" : "Phone Payment",
     });
   };
 
@@ -254,11 +257,62 @@ const Cart: React.FC = () => {
                     </TabsList>
                     
                     <TabsContent value="card" className="space-y-4">
-                      <p className="text-center text-sm text-gray-500">
-                        This is a demo application. No real payment will be processed.
-                      </p>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium" htmlFor="cardNumber">
+                            Card Number
+                          </label>
+                          <input
+                            type="text"
+                            id="cardNumber"
+                            placeholder="1234 5678 9012 3456"
+                            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hotel-navy/30"
+                          />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium" htmlFor="expiry">
+                              Expiry Date
+                            </label>
+                            <input
+                              type="text"
+                              id="expiry"
+                              placeholder="MM/YY"
+                              className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hotel-navy/30"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium" htmlFor="cvc">
+                              CVC
+                            </label>
+                            <input
+                              type="text"
+                              id="cvc"
+                              placeholder="123"
+                              className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hotel-navy/30"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium" htmlFor="nameOnCard">
+                            Name on Card
+                          </label>
+                          <input
+                            type="text"
+                            id="nameOnCard"
+                            placeholder="John Doe"
+                            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hotel-navy/30"
+                          />
+                        </div>
+                        
+                        <p className="text-center text-sm text-gray-500 mt-2">
+                          This is a demo application. No real payment will be processed.
+                        </p>
+                      </div>
                       
-                      <div className="space-y-2">
+                      <div className="space-y-2 pt-2 border-t">
                         <div className="flex justify-between">
                           <span>Order Number</span>
                           <span>{orderNumber}</span>
