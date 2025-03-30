@@ -9,6 +9,7 @@ interface BillDetails {
   total: number;
   date: Date;
   orderNumber: string;
+  paymentMethod?: string;
 }
 
 export const generatePDF = (billDetails: BillDetails): Blob => {
@@ -17,12 +18,12 @@ export const generatePDF = (billDetails: BillDetails): Blob => {
   // Add hotel logo/header
   doc.setFontSize(18);
   doc.setFont("helvetica", "bold");
-  doc.text("LUXURY HOTEL", 105, 20, { align: "center" });
+  doc.text("NEPALI RESTAURANT", 105, 20, { align: "center" });
   
   doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
-  doc.text("123 Elegant Street, Cityville", 105, 30, { align: "center" });
-  doc.text("Phone: (555) 123-4567", 105, 35, { align: "center" });
+  doc.text("123 Kathmandu Street, Thamel", 105, 30, { align: "center" });
+  doc.text("Phone: 9867391430", 105, 35, { align: "center" });
   
   // Bill information
   doc.setFontSize(14);
@@ -34,18 +35,22 @@ export const generatePDF = (billDetails: BillDetails): Blob => {
   doc.text(`Date: ${billDetails.date.toLocaleDateString()}`, 20, 60);
   doc.text(`Time: ${billDetails.date.toLocaleTimeString()}`, 20, 65);
   doc.text(`Order #: ${billDetails.orderNumber}`, 20, 70);
+  if (billDetails.paymentMethod) {
+    doc.text(`Payment Method: ${billDetails.paymentMethod}`, 20, 75);
+  }
   
   // Table headers
   doc.setFont("helvetica", "bold");
-  doc.text("Item", 20, 85);
-  doc.text("Qty", 120, 85);
-  doc.text("Price", 150, 85);
-  doc.text("Amount", 180, 85);
+  let yPos = 85;
+  doc.text("Item", 20, yPos);
+  doc.text("Qty", 120, yPos);
+  doc.text("Price", 150, yPos);
+  doc.text("Amount", 180, yPos);
   
-  doc.line(20, 87, 190, 87);
+  doc.line(20, yPos + 2, 190, yPos + 2);
   
   // Table content
-  let yPos = 95;
+  yPos += 10;
   doc.setFont("helvetica", "normal");
   
   billDetails.items.forEach((item) => {
@@ -75,7 +80,7 @@ export const generatePDF = (billDetails: BillDetails): Blob => {
   // Footer
   doc.setFont("helvetica", "italic");
   doc.setFontSize(10);
-  doc.text("Thank you for your stay. We hope to see you again soon!", 105, 270, { align: "center" });
+  doc.text("Thank you for your visit. Please come again!", 105, 270, { align: "center" });
   
   return doc.output("blob");
 };

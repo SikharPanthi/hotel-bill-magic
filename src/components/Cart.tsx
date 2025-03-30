@@ -4,9 +4,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { MenuItem, getMenuItemById } from "@/utils/menuData";
 import { downloadPDF } from "@/utils/pdfGenerator";
-import { Check, Download, Receipt, X } from "lucide-react";
+import { Check, Download, Receipt, X, CreditCard, QrCode, Phone } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Define the cart item interface
 export interface CartItem {
@@ -15,6 +16,9 @@ export interface CartItem {
   price: number;
   quantity: number;
 }
+
+// Define payment method type
+type PaymentMethod = "card" | "esewa" | "phone";
 
 interface CartContextType {
   items: CartItem[];
@@ -114,6 +118,7 @@ const Cart: React.FC = () => {
   const { items, removeItem, updateQuantity, getCartTotal, clearCart } = useCart();
   const [isPaid, setIsPaid] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
 
   const { subtotal, tax, total } = getCartTotal();
   const orderNumber = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -226,33 +231,110 @@ const Cart: React.FC = () => {
                   Proceed to Payment
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle>Complete Your Payment</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4 py-4">
-                  <p className="text-center text-sm text-gray-500">
-                    This is a demo application. No real payment will be processed.
-                  </p>
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Order Number</span>
-                      <span>{orderNumber}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Total Amount</span>
-                      <span className="font-medium">${total.toFixed(2)}</span>
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    className="w-full bg-hotel-navy hover:bg-hotel-navy/90"
-                    disabled={isPaymentProcessing}
-                    onClick={handlePayment}
-                  >
-                    {isPaymentProcessing ? "Processing..." : "Complete Payment"}
-                  </Button>
+                
+                <div className="py-4">
+                  <Tabs defaultValue="card" onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}>
+                    <TabsList className="grid grid-cols-3 mb-4">
+                      <TabsTrigger value="card" className="flex items-center gap-2">
+                        <CreditCard className="h-4 w-4" />
+                        <span>Card</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="esewa" className="flex items-center gap-2">
+                        <QrCode className="h-4 w-4" />
+                        <span>eSewa</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="phone" className="flex items-center gap-2">
+                        <Phone className="h-4 w-4" />
+                        <span>Phone</span>
+                      </TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="card" className="space-y-4">
+                      <p className="text-center text-sm text-gray-500">
+                        This is a demo application. No real payment will be processed.
+                      </p>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span>Order Number</span>
+                          <span>{orderNumber}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Total Amount</span>
+                          <span className="font-medium">${total.toFixed(2)}</span>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        className="w-full bg-hotel-navy hover:bg-hotel-navy/90"
+                        disabled={isPaymentProcessing}
+                        onClick={handlePayment}
+                      >
+                        {isPaymentProcessing ? "Processing..." : "Complete Payment"}
+                      </Button>
+                    </TabsContent>
+                    
+                    <TabsContent value="esewa" className="space-y-4">
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="mb-4 text-center">
+                          <p className="font-medium">Scan with eSewa app to pay</p>
+                          <p className="text-sm text-gray-500 mt-1">Sikhar Panthi</p>
+                        </div>
+                        
+                        <div className="bg-white p-3 rounded-lg mb-4">
+                          <img 
+                            src="/lovable-uploads/286b17d8-1b06-400d-b652-937743aca110.png" 
+                            alt="eSewa QR Code" 
+                            className="w-64 h-auto"
+                          />
+                        </div>
+                        
+                        <p className="text-sm text-gray-500 text-center">
+                          After scanning, click the button below to confirm payment
+                        </p>
+                      </div>
+                      
+                      <Button 
+                        className="w-full bg-[#60BB46] hover:bg-[#60BB46]/90 text-white"
+                        disabled={isPaymentProcessing}
+                        onClick={handlePayment}
+                      >
+                        {isPaymentProcessing ? "Verifying..." : "I've Paid with eSewa"}
+                      </Button>
+                    </TabsContent>
+                    
+                    <TabsContent value="phone" className="space-y-4">
+                      <div className="flex flex-col items-center text-center">
+                        <div className="mb-4">
+                          <p className="font-medium">Pay via Phone</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Call or send payment to the number below
+                          </p>
+                        </div>
+                        
+                        <div className="bg-gray-50 w-full p-4 rounded-lg mb-4 flex flex-col items-center">
+                          <p className="text-2xl font-bold mb-1">9867391430</p>
+                          <p className="text-gray-500">Sikhar Panthi</p>
+                        </div>
+                        
+                        <p className="text-sm text-gray-500">
+                          After sending the payment, click the button below to confirm
+                        </p>
+                      </div>
+                      
+                      <Button 
+                        className="w-full bg-hotel-navy hover:bg-hotel-navy/90"
+                        disabled={isPaymentProcessing}
+                        onClick={handlePayment}
+                      >
+                        {isPaymentProcessing ? "Verifying..." : "I've Sent the Payment"}
+                      </Button>
+                    </TabsContent>
+                  </Tabs>
                 </div>
               </DialogContent>
             </Dialog>
@@ -285,6 +367,13 @@ const Cart: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Amount Paid</span>
                 <span className="font-medium">${total.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Payment Method</span>
+                <span>
+                  {paymentMethod === "card" ? "Credit Card" : 
+                   paymentMethod === "esewa" ? "eSewa" : "Phone Payment"}
+                </span>
               </div>
             </div>
           </div>
