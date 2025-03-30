@@ -1,4 +1,3 @@
-
 import React, { useContext, useState, createContext } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -126,8 +125,7 @@ const Cart: React.FC = () => {
     setTimeout(() => {
       setIsPaymentProcessing(false);
       setIsPaid(true);
-      toast({
-        title: "Payment successful!",
+      toast.success("Payment successful!", {
         description: "Your order has been processed."
       });
     }, 1500);
@@ -244,7 +242,7 @@ const Cart: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span>Total Amount</span>
-                      <span className="font-semibold">${total.toFixed(2)}</span>
+                      <span className="font-medium">${total.toFixed(2)}</span>
                     </div>
                   </div>
                   
